@@ -11,17 +11,21 @@ import {
     ResourceItem,
     ResourceList,
     Badge,
-    Card
-
+    Card,
+    InlineGrid,
+    
    } from '@shopify/polaris';
 import "@shopify/polaris/build/esm/styles.css";
 import {DeleteIcon} from "@shopify/polaris-icons"
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 const HeaderBar = () => {
   return (
- 
-      <Box padding='025' borderBlockEndWidth="050">
+
+
+    
+      <Box padding='025' borderBlockEndWidth="050"   
+      >
         <InlineStack wrap={false} align="space-between" width="100%" blockAlign='center'>
           <Box minWidth="50px" background="bg-fill-critical">
             <Text>logo</Text>
@@ -34,17 +38,16 @@ const HeaderBar = () => {
           </Box>
         </InlineStack>
       </Box>
-   
+
   );
 }
-
-
 
 const renderItem = (item)=>{
   const {id, content, status} = item;
   return(
-    <div style= {{ margin: "5px 0",
-    }}>
+    <Fragment>
+    <Margin top ={"10px"} />
+    <Box>
       <ResourceItem
         id= {id}
         >
@@ -54,19 +57,29 @@ const renderItem = (item)=>{
               {content}
             </Text>
           </Box>
-          <Box>
-            <Badge tone="info">{status}</Badge>
-            <Button>
+          <Box width='70%'>   
+          <InlineStack align='end' blockAlign='center' gap={200} >
+            <Box width='80px'>
+              <InlineStack align='center' blockAlign='center'>
+                <Badge tone={status === "done" ? "success" : "small"}>{status}</Badge>
+              </InlineStack>  
+            </Box>
+            <Box>
+              <Button variant="secondary">
               Complete
-            </Button>
-            <Button>
+              </Button>
+            </Box>
+            <Box>
+              <Button variant="primary" tone="critical">
               Delete
-            </Button>
+              </Button>
+            </Box>  
+          </InlineStack>
           </Box>
         </InlineStack>
      </ResourceItem>
-    </div>
-      
+    </Box>     
+    </Fragment>
   )
 
 }
@@ -75,6 +88,7 @@ const renderItem = (item)=>{
 
 const Body = () =>{
   const [selectedItems, setSelectedItems]= useState();
+
   const resourceName ={
     singular: 'todos',
     plural: 'todos',
@@ -120,46 +134,57 @@ const Body = () =>{
 
     
   return (
-    <div style={{width : "50%", margin : "auto", marginTop: "20px",
 
-    }}>
-      <BlockStack>
-        <div style ={{marginBottom:"20px"}}>
-          <InlineStack align='space-between' blockAlign='center'>
-                <Text tone='base' variant='bodyLg' alignment='center'>
-                  Todos
-                </Text>
-                <Button tone='success'><Text>Create todo</Text></Button>
-          </InlineStack>
-        </div>
-        <Box>
-          <ResourceList
-            resourceName={resourceName}
-            items={items}
-            renderItem={renderItem}
-            selectedItems={selectedItems}
-            onSelectionChange={setSelectedItems}
-            promotedBulkActions={promotedBulkActions}
-            bulkActions={bulkActions}
-          />
-          <div style ={{height:'70px'}}></div>      
-        </Box>
-      </BlockStack>
-      
-
-    </div>
+    <BlockStack inlineAlign='center'>
+      <Margin top = {"20px"}/>
+      <Box width='50%'>
+      <Box>
+        
+        <InlineStack align='space-between' blockAlign='center'>
+          <Text tone='base' variant='bodyLg' alignment='center'>
+            Todos
+          </Text>
+          <Button tone='success' variant="primary"><Text>Create todo</Text></Button>
+        </InlineStack>
+      </Box>
+      <Box>
+        <Margin top = {"10px"}/>
+        <ResourceList
+          resourceName={resourceName}
+          items={items}
+          renderItem={renderItem}
+          selectedItems={selectedItems}
+          onSelectionChange={setSelectedItems}
+          promotedBulkActions={promotedBulkActions}
+          bulkActions={bulkActions}
+        />
+      </Box>
     
+      </Box>
+      </BlockStack>
+
+      
+  )
+}
+
+const Margin = ({top='0', left='0', right='0', bottom='0'})=>{
+  return (
+    <div
+      style={{
+        marginTop: top ,
+        marginLeft: left,
+        marginRight: right,
+        marginBottom: bottom,
+      }}
+    >
+    </div>
   )
 }
 
 
-
-
-
-
 const App = () => {
   return (
-    <Page fullWidth  className="no-padding">
+    <Page fullWidth>
       <HeaderBar />
       <Body/>
     </Page>

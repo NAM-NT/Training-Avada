@@ -23,8 +23,6 @@ const CheckData =(id) =>{
         }
     }
 }
-
-
 const GetAllProduct = (limit, order = 'asc') =>{
     limit = parseInt(limit)
     order = order.toString()
